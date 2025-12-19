@@ -1,117 +1,100 @@
+# GPT-2 Based Medical Dialogue System
 
-# 🤖 基于GPT2的智能医疗问诊机器人 🩺
+A medical question-answering system built on the GPT-2 language model, fine-tuned on a large corpus of doctor-patient dialogues. The system supports multi-turn conversations and provides both command-line and web-based interfaces for interaction.
 
-**让AI成为您的私人医疗助手！**  
-基于GPT2模型构建的医疗问答系统，提供精准、高效的医疗咨询体验。支持命令行交互与Web界面，助力医疗智能化！
+## Features
 
----
+- Specialized in medical domain, trained on over 30,000 real doctor-patient conversations
+- Fine-tuned from pre-trained GPT-2 for coherent and context-aware response generation
+- Supports multi-turn dialogue with configurable history length
+- Provides two deployment options: interactive command-line tool and Flask-based web service
+- Complete training, preprocessing, and inference pipeline
 
-## 🌟 项目亮点
-- **专业领域**：专注医疗问答，数据涵盖3万+医患对话  
-- **前沿技术**：基于GPT2模型，支持多轮对话生成  
-- **灵活部署**：提供命令行和Web交互两种方式  
-- **高效训练**：预训练模型微调，快速适配医疗场景  
----
+## Quick Start
 
-## 🚀 快速开始
+### Environment Requirements
 
-### 环境准备
+- Python ≥ 3.6
+- PyTorch ≥ 1.7.0
+- Transformers ≥ 4.2.0
+
+Install dependencies:
 ```bash
-# 基础依赖
-Python>=3.6  
-PyTorch>=1.7.0  
-Transformers>=4.2.0
-
-# 一键安装
 pip install -r requirements.txt
-
-
-### 数据准备
-1. 下载数据到指定目录：  
-   ```bash
-   mkdir -p /Users/**/PycharmProjects/llm/Gpt2_Chatbot/data
-   ```
-2. 将训练数据（`medical_train.txt` 和 `medical_valid.txt`）放入上述目录  
-
-### 模型训练
-```bash
-# 启动训练脚本
-python /path/to/train.py --pretrained_model gpt2-medium
 ```
-💡 支持自定义参数：`batch_size`、`learning_rate`、`epochs`  
 
-### 启动交互
-1. **命令行模式**  
+### Data Preparation
+
+Place the training and validation text files in the data directory:
+```
+data/
+├── medical_train.txt
+└── medical_valid.txt
+```
+
+Preprocess the data (if not already done):
+```bash
+python data_preprocess/preprocess.py
+```
+
+### Training
+
+```bash
+python train.py --pretrained_model gpt2-medium
+```
+
+Training parameters such as batch size, learning rate, and number of epochs can be adjusted in `parameter_config.py`.
+
+### Inference
+
+1. Command-line interaction:
    ```bash
    python interact.py
-   # 输入问题，按 Ctrl+Z 结束对话
    ```
-2. **Web界面模式**  
+
+2. Web interface:
    ```bash
    python flask_predict.py
-   # 访问 http://localhost:5000 开始对话
    ```
+   Then visit http://localhost:5000 in your browser.
 
----
+## Project Structure
 
-## 📂 项目结构
-```plaintext
+```
 Gpt2_Chatbot/
-├── data/                   # 训练数据
-│   ├── medical_train.txt
-│   └── medical_valid.txt
-├── data_preprocess/        # 数据处理脚本
+├── data/                   # Training and validation data
+├── data_preprocess/        # Data preprocessing scripts
 │   ├── preprocess.py
 │   ├── dataset.py
 │   └── dataloader.py
-├── model/                  # 模型配置与预训练文件
-│   ├── config.json
-│   └── pytorch_model.bin
-├── train.py                # 训练主程序
-├── interact.py             # 命令行交互
-└── flask_predict.py        # Web交互服务
+├── save_model/             # Trained model checkpoints
+├── train.py                # Training script
+├── interact.py             # Command-line inference
+├── flask_predict.py        # Web service
+├── app.py                  # Flask application
+└── parameter_config.py     # Hyperparameters and paths
 ```
 
----
+## Model Architecture
 
-## 🔧 核心模块详解
+The system uses GPT2LMHeadModel with a custom tokenizer (BertTokenizerFast) configured with [CLS] and [SEP] tokens to handle dialogue turns. Input sequences are formatted as:
 
-### 📊 数据处理流程
-```mermaid
-graph LR
-A[原始数据] --> B(格式转换)
-B --> C(向量编码)
-C --> D[DataLoader封装]
-```
+`[CLS] utterance1 [SEP] utterance2 [SEP] ...`
 
-### 🧠 模型架构
-- **输入层**：词嵌入 + 位置编码  
-- **核心层**：12层Transformer Decoder  
-- **输出层**：概率分布生成回答  
+Generation employs top-k sampling with repetition penalty to produce fluent and relevant responses.
 
-```python
-# 加载预训练模型
-from transformers import GPT2LMHeadModel
-model = GPT2LMHeadModel.from_pretrained("gpt2-medium")
-```
+## Training Metrics
 
----
+| Metric              | Training Set | Validation Set |
+|---------------------|--------------|----------------|
+| Accuracy            | 92.3%        | 88.7%          |
+| Perplexity (PPL)    | 15.2         | 18.6           |
 
-## 📈 训练指标
-| 指标         | 训练集 | 验证集 |
-|--------------|--------|--------|
-| 准确率       | 92.3%  | 88.7%  |
-| 困惑度（PPL）| 15.2   | 18.6   |
+## Example Dialogue
 
----
+**User**: What auxiliary treatments are available for Parkinson's plus syndrome?  
 
-## 💬 对话示例
-**用户**: 帕金森叠加综合征的辅助治疗有哪些？  
-**AI医生**: 🩺 推荐方案：  
-1. 康复训练（如平衡练习）  
-2. 生活护理指导（防跌倒措施）  
-3. 低频重复经颅磁刺激治疗  
-
---- 
-
-⭐ **如果觉得项目有用，欢迎Star支持！**  
+**System**: Recommended approaches include:  
+1. Rehabilitation training (e.g., balance exercises)  
+2. Daily living guidance (fall prevention measures)  
+3. Low-frequency repetitive transcranial magnetic stimulation
