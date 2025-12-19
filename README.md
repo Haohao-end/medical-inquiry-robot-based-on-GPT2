@@ -1,6 +1,7 @@
 # GPT-2 Based Medical Dialogue System
 
 A medical question-answering system built on the GPT-2 language model, fine-tuned on a large corpus of doctor-patient dialogues. The system supports multi-turn conversations and provides both command-line and web-based interfaces for interaction.
+
 [English](README.md) | [中文](README_ZH.md)
 
 ## Features
