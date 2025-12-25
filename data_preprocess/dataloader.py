@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import torch.nn.utils.rnn as rnn_utils  # 导入rnn_utils模块，用于处理可变长度序列的填充和排序
 from torch.utils.data import Dataset, DataLoader  # 导入Dataset和DataLoader模块，用于加载和处理数据集
 import torch  # 导入torch模块，用于处理张量和构建神经网络
@@ -68,4 +67,5 @@ if __name__ == '__main__':
         print(f'input_ids--->{input_ids.shape}')
         print(f'labels--->{labels.shape}')
         print('*'*80)
+
         break
