@@ -1,5 +1,3 @@
-#-*- coding: utf-8 -*- 
-
 import torch
 import torch.nn.functional as F
 
@@ -61,4 +59,5 @@ def calculate_acc(logit, labels, ignore_index=-100):
 
     n_word = non_pad_mask.sum().item()
     # print(f'non_pad_mask.sum()-->{non_pad_mask.sum()}')
+
     return n_correct, n_word
