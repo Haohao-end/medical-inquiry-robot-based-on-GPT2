@@ -1,6 +1,4 @@
-#-*- coding: utf-8 -*-
 import torch
-
 
 class ParameterConfig():
     def __init__(self):
@@ -33,4 +31,5 @@ if __name__ == '__main__':
     pc = ParameterConfig()
     print(pc.train_path)
     print(pc.device)
+
     print(torch.cuda.device_count())
