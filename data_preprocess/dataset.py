@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from torch.utils.data import Dataset  # 导入Dataset模块，用于定义自定义数据集
 import torch  # 导入torch模块，用于处理张量和构建神经网络
 
@@ -36,4 +34,5 @@ class MyDataset(Dataset):
         input_ids = input_ids[:self.max_len]  # 根据最大序列长度对输入进行截断或填充
         input_ids = torch.tensor(input_ids, dtype=torch.long)  # 将输入序列转换为张量long类型
         return input_ids  # 返回样本的输入序列张量
+
 
